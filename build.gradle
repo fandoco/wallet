@@ -44,6 +44,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "com.auth0:java-jwt:3.4.0"
+    compile 'org.joda:joda-money:1.0.1'
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
