@@ -69,7 +69,22 @@ class WalletTest {
         transactions.add(food3)
         transactions.add(food4)
 
-        TransactionProcessor.process(transactions)
+        val accountViews = TransactionProcessor.process(transactions)
+
+        accountViews.forEach { accountView ->
+            println()
+            println(accountView.account.name)
+            println()
+            println("Starting balance  - ${accountView.account.balance.amount}")
+            var endBalance = accountView.account.balance.amount
+            accountView.entries.forEach {entry ->
+                endBalance = endBalance.plus(entry.amount)
+                println("    ${entry.date}    ${entry.description}    ${entry.amount}")
+            }
+            println("End balance - $endBalance")
+        }
+
+
     }
 }
 

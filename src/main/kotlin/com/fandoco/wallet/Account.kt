@@ -8,26 +8,14 @@ import kotlin.collections.ArrayList
 
 class Account private constructor(val id: UUID, val name: String, val currency: CurrencyUnit, val balance: Balance) {
     constructor(name: String, currency: CurrencyUnit, balance: Balance) : this(UUID.randomUUID(), name, currency, balance)
+}
 
+class AccountView constructor(val account: Account) {
     val entries: ArrayList<Entry> = ArrayList()
-
-    fun setBalance(date: LocalDate, amount: Money) {
-        val currentBalance: Money = balance.amount
-
-        entries.forEach { entry ->
-            if (entry.date.isAfter(balance.date)) {
-                currentBalance.plus(entry.amount)
-            }
-        }
-
-        val adjustmentEntry = Entry(UUID.randomUUID(), date, "Adjustment", amount - currentBalance)
-        entries.add(adjustmentEntry)
-    }
 
     fun addEntry(entry: Entry) {
         entries.add(entry)
     }
-
 }
 
 class Entry(id: UUID, val transactionId: UUID, val date: LocalDate, val description: String, val amount: Money) {
@@ -40,3 +28,5 @@ class Entry(id: UUID, val transactionId: UUID, val date: LocalDate, val descript
 }
 
 class Balance(val date: LocalDate, val amount: Money)
+
+class PartialEntry(val date: LocalDate, val amount: Money)
