@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wallet</title>
+    <meta content="width=device-width, initial-scale =1" name="viewport">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet"/>
+    <link href="image/png/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+    <link href="image/png/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+
+    <script src="js/index.js"></script>
+    <script src="js/add.js"></script>
+    <script src="js/update.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
+    <script id="addtypeform" type="text/template">
+        <form>
+            <div class="form-group row">
+                <label for="addType" class="col-sm-5 col-form-label">Enter New Type:</label>
+                <div class="col-sm-5"><input type="addType" class="form-control" id="addType" placeholder=" Type"></div>
+            </div>
+            <button id="addtypebtn" type="button" onclick="onAddType()" class="btn btn-primary">ADD</button>
+            <br/><br/>
+            <div id="typesDropdownAddDiv"></div>
+            <br/>
+            <div class="form-group row">
+                <label for="addKey" class="col-sm-5 col-form-label">Enter New Key:</label>
+                <div class="col-sm-5"><input type="addKey" class="form-control" id="addKey" placeholder=" New Key">
+                </div>
+                <label for="addVal" class="col-sm-5 col-form-label">Enter New Value:</label>
+                <div class="col-sm-5"><input type="addVal" class="form-control" id="addVal" placeholder=" New Value">
+                </div>
+            </div>
+            <button id="addKeysbtn" type="button" onclick="addEntry()" class="btn btn-primary">ADD</button>
+        </form>
+    </script>
+
+    <script id="loginform" type="text/template">
+        <p>Please login to use the service</p>
+        <form class="col-lg-4 col-md-4 col-sm-8 col-xs-12">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="id" class="form-control" id="id" placeholder="Enter ID">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <button type="button" onclick="checkLogin()" class="btn btn-primary">Login</button>
+            <p><br/></p>
+            <div id="info" style="color: red"></div>
+        </form>
+    </script>
+    <script id="menu" type="text/template">
+
+</script>
+
+    <script id="typesDropdown" type="text/template">
+        <br>
+
+        <table>
+            <tr>
+                <td><label for="categoryDropDown">Select Category:</label><select id="categoryDropDown"
+                                                                                  onchange="showDetails()">
+                    <option> -</option>
+                </select>
+                </td>
+            </tr>
+        </table>
+        <p id=infoMessage></p>
+        <div class="table-responsive">
+            <table id="dataTable" class="table"></table>
+        </div>
+
+    </script>
+    <script id="updateform" type="text/template">
+        <form>
+            <div id="typesDropdownUpdateDiv"></div>
+            <br/>
+            <div id="keysDropdownUpdateDiv"></div>
+            <br/>
+            <div class="form-group row">
+                <label for="addVal" class="col-sm-5 col-form-label">Enter New Value:</label>
+                <div class="col-sm-5"><input type="updateVal" class="form-control" id="updateVal"></div>
+            </div>
+            <button id="updatebtn" type="button" onclick="updateEntry()" class="btn btn-primary">Update</button>
+        </form>
+    </script>
+    <script id="sidemenuArea" type="text/template">
+        <div class="menu">
+            <ul>
+                <li id="get" onclick="getTypes()">Get Data</li>
+                <li id="add" onclick="addData()">ADD</li>
+                <li id="update" onclick="displayUpdate()">Update</li>
+                <li id="delete" onclick="displayDelete()">Delete</li>
+                <li id="logou" onclick="displayLogout()">Logout</li>
+                <li id="help" onclick="help()">Help</li>
+            </ul>
+        </div>
+
+    </script>
+    <script id="typesDropdownCommonComponent" type="text/template">
+        <table>
+            <tr>
+                <td>
+                    <label for="typesDropDownCommon">Select Category:</label>
+                </td>
+                <td>
+                    <select id="typesDropDownCommon">
+                        <option>----</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+    </script>
+    <script id="keysDropdownCommonComponent" type="text/template">
+        <table>
+            <tr>
+                <td><label for="keysDropDownCommon">Select a key to update:</label>
+                    <select id="keysDropDownCommon" onchange="showValue()">
+                        <option>----</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+    </script>
+</head>
+
+<body onload="displayLogin()">
+
+<div class="jumbotron">
+
+    <div class="container">
+
+        <h1>Wallet</h1>
+
+        <div class="menu col-lg-2 col-md-2 col-sm-4 col-xs-12" id="nav" style="color:black; padding-top: 50px"></div>
+
+        <div class="col-lg-10 col-md-10 col-sm-8 col-md-12" id="details" style="color:black; padding-top: 50px"></div>
+
+    </div>
+</div>
+</body>
+</html>

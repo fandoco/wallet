@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script src="crypto.js"></script>
+    <script src="db.js"></script>
+</head>
+<body onload="supportsCrypto()">
+
+<br/><br/>
+
+<div id="supportCrypto"></div>
+
+<br/><br/>
+
+<button id="generateKey" onclick="generateKey()">Generate Key</button>
+<br/>
+<div id="privateKey"></div>
+
+<br/><br/>
+
+Key to use : <input id="keyToUse">
+<button id="importKey" onclick="importKeyString()">Import Key</button>
+
+<br/>
+
+Text to encrypt : <input id="textToEncrypt">
+<button id="encrypt" onclick="encryptText()">Encrypt</button>
+
+<br/>
+
+<div id="encryptedText"></div>
+<div id="iv"></div>
+
+<br/><br/>
+
+Text to decrypt : <input id="textToDecrypt">
+<button id="decrypt" onclick="decryptText()">Decrypt</button>
+
+<br/>
+
+<div id="decryptedText"></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<button id="testDB" onclick="addKey()">Add Key</button>
+<button id="getItem" onclick="getKey()">Get Key</button>
+<button id="deleteItem" onclick="removeKey()">Remove Key</button>
+
+</body>
+
+</html>
