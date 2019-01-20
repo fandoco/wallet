@@ -2,7 +2,10 @@ package com.fandoco.wallet
 
 import org.junit.Test
 import org.junit.jupiter.api.TestInstance
+import java.time.Duration
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WalletTest {
@@ -85,6 +88,27 @@ class WalletTest {
         }
 
 
+    }
+
+    @Test
+    fun testRecEntriesForThePeriod() {
+        val amexCard = Account("Amex Card", JPY, Balance(thisMonth(1), jpy(-180000)))
+        val electricity = Account("Electricity", JPY, Balance(thisMonth(1), jpy(0)))
+
+        val periodStart = LocalDate.of(2018, 12, 25)
+        val periodEnd = LocalDate.of(2019, 10, 20)
+        val recurringTransaction = RecurringTransaction(
+                "Electricity",
+                LocalDate.of(2018, 1, 31),
+                LocalDate.MAX,
+                Monthly(2),
+                jpy(3000),
+                amexCard,
+                electricity
+        )
+
+        val entries = recEntriesForThePeriod(periodStart, periodEnd, recurringTransaction)
+        println(entries)
     }
 }
 

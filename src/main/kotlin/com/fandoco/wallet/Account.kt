@@ -29,4 +29,4 @@ class Entry(id: UUID, val transactionId: UUID, val date: LocalDate, val descript
 
 class Balance(val date: LocalDate, val amount: Money)
 
-class PartialEntry(val date: LocalDate, val amount: Money)
+data class FutureEntry(val date: LocalDate, val description: String, val amount: Money)
