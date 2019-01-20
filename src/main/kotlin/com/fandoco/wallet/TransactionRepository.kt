@@ -7,8 +7,6 @@ import org.jetbrains.exposed.dao.UUIDTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.money.CurrencyUnit
-import org.joda.money.Money
-import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -19,9 +17,9 @@ object TransactionRepository {
 
     fun deleteAll() {
         transaction {
-            AccountTable.deleteAll()
-            TransactionTable.deleteAll()
             RecurringTransactionTable.deleteAll()
+            TransactionTable.deleteAll()
+            AccountTable.deleteAll()
         }
     }
 
@@ -52,7 +50,7 @@ object TransactionRepository {
         transaction {
             addLogger(StdOutSqlLogger)
 
-            val row = AccountTable.select {AccountTable.id eq UUID.fromString(id)}.singleOrNull()
+            val row = AccountTable.select { AccountTable.id eq UUID.fromString(id) }.singleOrNull()
             if (row != null) {
                 account = Account(
                         row[AccountTable.id].value,
@@ -78,7 +76,7 @@ object TransactionRepository {
             }
 
         }
-        return accounts.toList()
+        return accounts
     }
 
     fun addTransaction(transaction: Transaction): String {
@@ -103,6 +101,51 @@ object TransactionRepository {
             else -> return id as String
         }
     }
+
+    fun getTransactions(account: Account): List<Transaction> {
+        val transactions = ArrayList<Transaction>()
+        transaction {
+            addLogger(StdOutSqlLogger)
+
+            TransactionTable.select {
+                (TransactionTable.fromAccount eq account.id) or (TransactionTable.toAccount eq account.id)
+            }.forEach { row ->
+                val fromAccount = getAccount(row[TransactionTable.fromAccount].value.toString())!!
+                val toAccount = getAccount(row[TransactionTable.toAccount].value.toString())!!
+                transactions.add(Transaction(
+                        row[TransactionTable.id].value,
+                        toLocalDate(row[TransactionTable.transactionDate]),
+                        row[TransactionTable.description],
+                        toMoney(fromAccount.currency.code, row[TransactionTable.amount]),
+                        fromAccount,
+                        toAccount))
+            }
+
+        }
+        return transactions
+    }
+
+    fun getAllTransactions(): List<Transaction> {
+        val transactions = ArrayList<Transaction>()
+        transaction {
+            addLogger(StdOutSqlLogger)
+
+            TransactionTable.selectAll().forEach { row ->
+                        val fromAccount = getAccount(row[TransactionTable.fromAccount].value.toString())!!
+                        val toAccount = getAccount(row[TransactionTable.toAccount].value.toString())!!
+                        transactions.add(Transaction(
+                                row[TransactionTable.id].value,
+                                toLocalDate(row[TransactionTable.transactionDate]),
+                                row[TransactionTable.description],
+                                toMoney(fromAccount.currency.code, row[TransactionTable.amount]),
+                                fromAccount,
+                                toAccount))
+                    }
+
+        }
+        return transactions
+    }
+
 }
 
 object AccountTable : UUIDTable("tbl_account") {

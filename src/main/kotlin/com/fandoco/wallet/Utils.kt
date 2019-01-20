@@ -66,6 +66,11 @@ fun toLocalDate(dateTime: DateTime): LocalDate {
             dateTime.dayOfMonth
     )
 }
+
 fun toBalance(currency: String, dateTime: DateTime, amount: BigDecimal): Balance {
-    return Balance(toLocalDate(dateTime), Money.of(CurrencyUnit.of(currency), amount.setScale(CurrencyUnit.of(currency).decimalPlaces)))
+    return Balance(toLocalDate(dateTime), toMoney(currency, amount))
+}
+
+fun toMoney(currency: String, amount: BigDecimal): Money {
+    return Money.of(CurrencyUnit.of(currency), amount.setScale(CurrencyUnit.of(currency).decimalPlaces))
 }

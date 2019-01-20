@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Transaction private constructor(val id: UUID, val date: LocalDate, val description: String, val amount: Money, val from: Account, val to: Account) {
+data class Transaction constructor(val id: UUID, val date: LocalDate, val description: String, val amount: Money, val from: Account, val to: Account) {
     constructor(
             date: LocalDate,
             description: String,
@@ -19,7 +19,7 @@ class Transaction private constructor(val id: UUID, val date: LocalDate, val des
     ) : this(UUID.randomUUID(), date, description, amount, from, to)
 }
 
-class RecurringTransaction(
+data class RecurringTransaction(
         val description: String,
         val fromDate: LocalDate,
         val toDate: LocalDate,
