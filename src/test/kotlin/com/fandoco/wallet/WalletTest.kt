@@ -96,7 +96,7 @@ class WalletTest {
         val electricity = Account("Electricity", JPY, Balance(thisMonth(1), jpy(0)))
 
         val periodStart = LocalDate.of(2018, 12, 25)
-        val periodEnd = LocalDate.of(2019, 10, 20)
+        val periodEnd = LocalDate.of(2019, 10, 25)
         val recurringTransaction = RecurringTransaction(
                 "Electricity",
                 LocalDate.of(2018, 1, 31),

@@ -6,11 +6,11 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Account private constructor(val id: UUID, val name: String, val currency: CurrencyUnit, val balance: Balance) {
+data class Account constructor(val id: UUID, val name: String, val currency: CurrencyUnit, val balance: Balance) {
     constructor(name: String, currency: CurrencyUnit, balance: Balance) : this(UUID.randomUUID(), name, currency, balance)
 }
 
-class AccountView constructor(val account: Account) {
+data class AccountView constructor(val account: Account) {
     val entries: ArrayList<Entry> = ArrayList()
 
     fun addEntry(entry: Entry) {
@@ -18,7 +18,7 @@ class AccountView constructor(val account: Account) {
     }
 }
 
-class Entry(id: UUID, val transactionId: UUID, val date: LocalDate, val description: String, val amount: Money) {
+data class Entry(val id: UUID, val transactionId: UUID, val date: LocalDate, val description: String, val amount: Money) {
     constructor(
             transactionId: UUID,
             date: LocalDate,
@@ -27,6 +27,6 @@ class Entry(id: UUID, val transactionId: UUID, val date: LocalDate, val descript
     ) : this(UUID.randomUUID(), transactionId, date, description, amount)
 }
 
-class Balance(val date: LocalDate, val amount: Money)
+data class Balance(val date: LocalDate, val amount: Money)
 
 data class FutureEntry(val date: LocalDate, val description: String, val amount: Money)

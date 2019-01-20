@@ -2,9 +2,11 @@ package com.fandoco.wallet
 
 import org.joda.money.CurrencyUnit
 import org.joda.money.Money
+import org.joda.time.DateTime
 import java.math.BigDecimal
 import java.time.Duration
 import java.time.LocalDate
+import java.time.ZoneOffset
 
 val LKR = CurrencyUnit.of("LKR")
 val JPY = CurrencyUnit.JPY
@@ -51,4 +53,19 @@ fun recEntriesForThePeriod(periodStart: LocalDate, periodEnd: LocalDate, transac
     }
 
     return entries
+}
+
+fun toDateTime(localDate: LocalDate): DateTime {
+    return DateTime(localDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli())
+}
+
+fun toLocalDate(dateTime: DateTime): LocalDate {
+    return LocalDate.of(
+            dateTime.year,
+            dateTime.monthOfYear,
+            dateTime.dayOfMonth
+    )
+}
+fun toBalance(currency: String, dateTime: DateTime, amount: BigDecimal): Balance {
+    return Balance(toLocalDate(dateTime), Money.of(CurrencyUnit.of(currency), amount.setScale(CurrencyUnit.of(currency).decimalPlaces)))
 }
