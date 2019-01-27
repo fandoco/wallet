@@ -183,6 +183,40 @@ object TransactionRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    fun getAccounts(): List<Account> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun addAccount(name: String, currencyUnit: CurrencyUnit, reconDate: LocalDate, balance: BigDecimal): String {
+        var id: String? = null
+        transaction {
+            // print sql to std-out
+            addLogger(StdOutSqlLogger)
+
+            val entityId = AccountTable.insert { row ->
+                row[AccountTable.name] = name
+                row[AccountTable.currency] = currencyUnit.code
+                row[AccountTable.reconDate] = toDateTime(reconDate)
+                row[AccountTable.balance] = balance
+            } get AccountTable.id
+
+            id = entityId?.value.toString()
+
+        }
+        when (id) {
+            null -> throw Exception("Error while trying to add account. {name: ${name}")
+            else -> return id as String
+        }
+    }
+
+    fun updateAccount(name: String, currencyUnit: CurrencyUnit, reconDate: LocalDate, balance: BigDecimal): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun deleteAccount(uuid: UUID) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
 
 object AccountTable : UUIDTable("tbl_account") {

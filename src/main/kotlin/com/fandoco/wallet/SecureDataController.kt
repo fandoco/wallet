@@ -1,5 +1,6 @@
 package com.fandoco.wallet
 
+import org.joda.money.CurrencyUnit
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler
 import org.springframework.web.bind.annotation.*
@@ -12,6 +13,35 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 @CrossOrigin(origins = ["*"])
 class SecureDataController {
+
+    @GetMapping("/accounts")
+    fun getAccounts(): List<Account> {
+        return TransactionRepository.getAccounts()
+    }
+
+    @PostMapping("/accounts")
+    fun addAccount(@RequestBody body: Map<String, String>): String {
+        return TransactionRepository.addAccount(
+                body["name"]!!,
+                CurrencyUnit.of(body["currency"])!!,
+                LocalDate.parse(body["reconDate"]!!),
+                BigDecimal(body["balance"]!!)
+        )
+    }
+
+    @PutMapping("/accounts")
+    fun updateAccount(@RequestBody body: Map<String, String>): String {
+        return TransactionRepository.updateAccount(
+                body["name"]!!,
+                CurrencyUnit.of(body["currency"])!!,
+                LocalDate.parse(body["reconDate"]!!),
+                BigDecimal(body["balance"]!!))
+    }
+
+    @DeleteMapping("/accounts")
+    fun deleteAccount(@RequestBody body: Map<String, String>) {
+        TransactionRepository.deleteAccount(UUID.fromString(body["id"]!!))
+    }
 
     @GetMapping("/transactions")
     fun getTransactions(@RequestParam(value = "fromDate") fromDate: String): List<Transaction> {
