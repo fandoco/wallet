@@ -7,6 +7,8 @@ import org.jetbrains.exposed.dao.UUIDTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.money.CurrencyUnit
+import java.math.BigDecimal
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -79,6 +81,29 @@ object TransactionRepository {
         return accounts
     }
 
+    fun addTransaction(date: LocalDate, description: String, amount: BigDecimal, fromAccountId: UUID, toAccountId: UUID): String {
+        var id: String? = null
+        transaction {
+            // print sql to std-out
+            addLogger(StdOutSqlLogger)
+
+            val entityId = TransactionTable.insert { row ->
+                row[TransactionTable.transactionDate] = toDateTime(date)
+                row[TransactionTable.description] = description
+                row[TransactionTable.amount] = amount
+                row[TransactionTable.fromAccount] = EntityID(fromAccountId, AccountTable)
+                row[TransactionTable.toAccount] = EntityID(toAccountId, AccountTable)
+            } get TransactionTable.id
+
+            id = entityId?.value.toString()
+
+        }
+        when (id) {
+            null -> throw Exception("Error while trying to insert transaction.")
+            else -> return id as String
+        }
+    }
+
     fun addTransaction(transaction: Transaction): String {
         var id: String? = null
         transaction {
@@ -144,6 +169,18 @@ object TransactionRepository {
 
         }
         return transactions
+    }
+
+    fun getTransactions(fromDate: LocalDate): List<Transaction> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun updateTransaction(date: LocalDate, description: String, amount: BigDecimal, fromAccount: UUID, toAccount: UUID): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun deleteTransaction(id: UUID) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

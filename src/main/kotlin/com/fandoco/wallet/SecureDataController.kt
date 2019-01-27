@@ -3,6 +3,9 @@ package com.fandoco.wallet
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler
 import org.springframework.web.bind.annotation.*
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -10,40 +13,35 @@ import javax.servlet.http.HttpServletResponse
 @CrossOrigin(origins = ["*"])
 class SecureDataController {
 
-    @GetMapping("/data")
-    fun getDataByType(@RequestParam(value = "type") type: String) : List<SecureDataEntry> {
-        return SecureDataRepository.getEntries(type)
+    @GetMapping("/transactions")
+    fun getTransactions(@RequestParam(value = "fromDate") fromDate: String): List<Transaction> {
+        return TransactionRepository.getTransactions(LocalDate.parse(fromDate))
     }
 
-    @GetMapping("/types")
-    fun getAllTypes() : List<String> {
-        return SecureDataRepository.getAllTypes()
+    @PostMapping("/transactions")
+    fun addTransaction(@RequestBody body: Map<String, String>): String {
+        return TransactionRepository.addTransaction(
+                LocalDate.parse(body["date"]!!),
+                body["description"]!!,
+                BigDecimal(body["amount"]!!),
+                UUID.fromString(body["fromAccountId"]!!),
+                UUID.fromString(body["toAccountId"]!!)
+        )
     }
 
-    @PostMapping("/types")
-    fun addType(@RequestBody body: Map<String, String>): String {
-        return SecureDataRepository.addType(body["name"]!!)
+    @PutMapping("/transactions")
+    fun updateTransaction(@RequestBody body: Map<String, String>): String {
+        return TransactionRepository.updateTransaction(
+                LocalDate.parse(body["date"]!!),
+                body["description"]!!,
+                BigDecimal(body["amount"]!!),
+                UUID.fromString(body["fromAccountId"]!!),
+                UUID.fromString(body["toAccountId"]!!))
     }
 
-    @DeleteMapping("/types")
-    fun deleteType(@RequestBody body: Map<String, String>) {
-        return SecureDataRepository.deleteTypeByName(body["name"]!!)
-    }
-
-
-    @PostMapping("/data")
-    fun addData(@RequestBody body: Map<String, String>): String {
-        return SecureDataRepository.addEntry(body["type"]!!, body["key"]!!, body["value"]!!)
-    }
-
-    @PutMapping("/data")
-    fun updateData(@RequestBody body: Map<String, String>) {
-        return SecureDataRepository.updateEntry(body["type"]!!, body["key"]!!, body["value"]!!)
-    }
-
-    @DeleteMapping("/data")
-    fun deleteData(@RequestBody body: Map<String, String>) {
-        return SecureDataRepository.deleteEntry(body["type"]!!, body["key"]!!)
+    @DeleteMapping("/transactions")
+    fun deleteTransaction(@RequestBody body: Map<String, String>) {
+        TransactionRepository.deleteTransaction(UUID.fromString(body["id"]!!))
     }
 
     @RequestMapping("/logout", method = [RequestMethod.POST])
